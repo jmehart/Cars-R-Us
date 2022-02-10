@@ -1,27 +1,28 @@
 //Import all the modules that create options groups to create a car
+import { Paints } from "./Paints.js"
+import { Interiors } from "./Interiors.js"
+import { Technologies } from "./Technologies.js"
+import { Wheels } from "./Wheels.js"
+
 //Create the overall HTML structure
 //Interpolate the four modules in their proper places in the overall HTML structure
 
 export const CarsRUs = () => {
     return ` 
-    <h1>Cars</h1>
+    <h1>Cars R Us</h1>
 
     <article class="choices">
     <section class="paintOptions">
-    <h2>Paint</h2>
-
+        ${Paints()}
     </section>
     <section class="interiorOptions">
-    <h2>Interior</h2>
-    
+        ${Interiors()}
     </section>
     <section class="techOptions">
-    <h2>Technology</h2>
-    
+        ${Technologies()}
     </section>
     <section class="wheelOptions">
-    <h2>Wheels</h2>
-    
+        ${Wheels()}
     </section>
     </article>
     `

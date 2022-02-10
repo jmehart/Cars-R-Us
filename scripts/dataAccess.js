@@ -1,8 +1,8 @@
 import { database } from "./database.js"
 
 
-export const getColor = () => {
-    return database.paintColor.map(color => ({...color}))
+export const getPaints = () => {
+    return database.paintColor.map(paint => ({...paint}))
 }
 
 export const getInterior = () => {
