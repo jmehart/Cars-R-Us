@@ -87,6 +87,10 @@ export const database = {
             price: 800
         }
     ],
+    //this stores the permanent state once someone clicks the order button
     customOrders: [],
+    
+    //Tracking User Choices as State
+    //this stores transient state as the user makes selections/choices
     orderBuilder: {}
 }
