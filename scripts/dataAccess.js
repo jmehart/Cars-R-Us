@@ -36,7 +36,7 @@ export const getOrders = () => {
 
 //Instead of just showing an alert when a paint is chosen, you now need to set the corresponding property of the order builder object in application state.
 export const setPaint = (id) => {
-      database.orderBuilder.colorId = id
+      database.orderBuilder.paintId = id
 }
     
 export const setInterior = (id) => {
@@ -48,12 +48,38 @@ export const setTechnology = (id) => {
 }
 
 export const setWheels = (id) => {
-    database.orderBuilder.wheelsId = id
+    database.orderBuilder.wheelId = id
 }
 
 
 //getState is created in case a module and function need to access the transient state for a condtional to compare a chosen option against state
-//We may not need this for this application since there are no radio buttons that would need to compare state in order to uncheck unselected buttons
+//We need this for when would need to compare state in order to unselect unselected buttons(you'll see this in conditionals in the modules)
 export const getState = () => {
     return {...database.orderBuilder}
+}
+
+
+//Create a function that stores transient state values into a permanent state
+export const addCustomOrder = () => {
+    // Copy the current state of user choices
+    //knows the choices/whats clicked because setter functions are invoked
+    const newOrder = {...database.orderBuilder}
+
+    // Add a new primary key to the object
+    //defines an immutable(const) variable named lastIndex
+    const lastIndex = database.customOrders.length 
+    newOrder.id = lastIndex + 1
+
+    // Add a timestamp to the order
+    newOrder.timestamp = Date.now()
+
+    // Add the new order object to custom orders state
+    // has the state of what you've been selecting and pushed into custoOrders permanent state (it's still in transient state still at this point)
+    database.customOrders.push(newOrder)
+
+    // Reset the temporary state for user choices
+    database.orderBuilder = {}
+
+    // Broadcast a notification that permanent state has changed
+    document.dispatchEvent(new CustomEvent("stateChanged"))
 }

@@ -1,4 +1,4 @@
-import { getPaints, setPaint } from "./dataAccess.js"
+import { getPaints, setPaint, getState } from "./dataAccess.js"
 
 //Invoke the getPaints() function created in dataAccess in order to iterate through the copied array
 const paints = getPaints()
@@ -8,6 +8,9 @@ const paints = getPaints()
 export const Paints = () => {
     //define the HTML and then add on to it
     let html = "<h2>Paints</h2>"
+
+    //Invoking the getState function to access transient state
+    const state = getState()
 
     //Start creating a dropdown menu, which uses the <select> HTML element
     //Whichever option the user chooses will then be displayed in the select box
@@ -20,16 +23,24 @@ export const Paints = () => {
     //A for..of loop iterates an array so that we can access properties in the paint array we copied into getPaint()
     //Iterate the paints array that we invoked up top
     for (const paint of paints) {
-         //amend the HTML element that shows options for the paint dropdown - this will show the paint colors
- //QUESTION:    // WHY DO WE AMEND THE HTML IN A FOR..OF LOOP BUT WE HAVE TO RETURN AN HTML ELEMENT IN .MAP()?
-                // We're not invoking the function we define like .map?
-        html += `<option value="${paint.id}">${paint.color}</option>`
+        //Conditional to match the paint id with the property paintId in the transient state
+        //Without this, the selected option would not take the place of "select a paint color" as default display.
+        if (paint.id === state.paintId) {
+            //amend the HTML element that shows options for the paint dropdown - this will show the paint colors
+//QUESTION:    // WHY DO WE AMEND THE HTML IN A FOR..OF LOOP BUT WE HAVE TO RETURN AN HTML ELEMENT IN .MAP()?
+            // We're not invoking the function we define like .map?
+            //Notice the word selected after option tag
+            html += `<option selected value="${paint.id}">${paint.color}</option>`
+            //Conditional that updates the dropdown to appear unselected if it's not in state (if false)
+        } else {
+            html += `<option value="${paint.id}">${paint.color}</option>`
+        }
     }
 
     //Don't forget the closing tag and return all of the HTML established in this function so that it displays when invoked
     html += "</select>"
     return html
-    
+
 }
 
 //Create an event listener to dispatch the "stateChanged" that the main module is listening for

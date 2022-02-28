@@ -1,4 +1,4 @@
-import { getInterior, setInterior } from "./dataAccess.js"
+import { getInterior, setInterior, getState } from "./dataAccess.js"
 
 //Invoke the getInterior() function created in dataAccess
 const interiors = getInterior()
@@ -6,7 +6,10 @@ const interiors = getInterior()
 //Iterate the array of interiors and build an HTML representation of that data.
 //Define an Interiors function and export to display HTML in the application - will import in CarsRUs module
 export const Interiors = () => {
-    
+
+    //Invoking the getState function to access transient state
+    const state = getState()
+
     //Start creating a dropdown menu, which uses the <select> HTML element
     //Whichever option the user chooses will then be displayed in the select box
     //Define a name so that we can access that value in an event listener
@@ -18,20 +21,28 @@ export const Interiors = () => {
         <select name="interior">
             <option value="0">Select an interior option</option>
             ${
-                //The map() array method is a conversion tool and iterates an array.
-                //It generates a new array with as many items as are in the original array, 
-                //but in the new array, it puts items in the form that you specify.
-                interiors.map(
-                    //Unlike a for..of loop, .map() invokes the function that you define.
-                    //As it iterates the array, it will take the object at the current location and pass it as an argument to your function. Your function defines the interior parameter.
-                    (interior) => {
-                        //return an HTML element that shows options for the interior dropdown - this will show the wheel values
-                        return `<option value="${interior.id}">${interior.seatType}</option>`
-                    }
-                ).join("")
-                //The .join() array method joins things together, such as these HTML elements 
-            }
-        </select>
+        //The map() array method is a conversion tool and iterates an array.
+        //It generates a new array with as many items as are in the original array, 
+        //but in the new array, it puts items in the form that you specify.
+        interiors.map(
+            //Unlike a for..of loop, .map() invokes the function that you define.
+            //As it iterates the array, it will take the object at the current location and pass it as an argument to your function. Your function defines the interior parameter.
+            (interior) => {
+                //Conditional to match the interior id with the property interiorId in the transient state
+                //Without this, the selected option would not take the place of "select an interior color" as default display.
+                if (interior.id === state.interiorId) {
+                    //return an HTML element that shows options for the interior dropdown - this will show the interior values
+                    //Notice the word selected after option tag
+                    return `<option selected value="${interior.id}">${interior.seatType}</option>`
+                    //Conditional that updates the dropdown to appear unselected if it's not in state (if false)
+                } else {
+                    return `<option value="${interior.id}">${interior.seatType}</option>`
+                }
+            }).join("")
+            //The .join() array method joins things together, such as these HTML elements 
+
+        }
+        </select >
     `
     //So an object comes into your function, and a string gets returned. That string goes into a new array.
 }

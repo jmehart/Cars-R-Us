@@ -1,4 +1,4 @@
-import { getTechnology, setTechnology } from "./dataAccess.js"
+import { getTechnology, setTechnology, getState } from "./dataAccess.js"
 
 //Invoke the getTechnology() function created in dataAccess
 const techs = getTechnology()
@@ -6,8 +6,11 @@ const techs = getTechnology()
 //Iterate the array of technology and build an HTML representation of that data.
 //Define a Technologies function and export to display HTML in the application - will import in CarsRUs module
 export const Technologies = () => {
-    //define the HTML and then add on to it
+    //Define the HTML and then add on to it
     let html = "<h2>Technologies</h2>"
+
+    //Invoking the getState function to access transient state
+    const state = getState()
 
     //Start creating a dropdown menu, which uses the <select> HTML element
     //Whichever option the user chooses will then be displayed in the select box
@@ -24,10 +27,19 @@ export const Technologies = () => {
         //Unlike a for..of loop, .map() invokes the function that you define.
         //As it iterates the array, it will take the object at the current location and pass it as an argument to your function. Your function defines the technology parameter.
         (tech) => {
-            //return an HTML element that shows options for the tech dropdown - this will show the package values
-            return `<option value="${tech.id}" >${tech.techPackage}</option>`
+            //Conditional to match the tech id with the property technologyId in the transient state
+            //Without this, the selected option would not take the place of "select a technology package" as default display.
+            if (tech.id === state.technologyId) {
+                //return an HTML element that shows options for the tech dropdown - this will show the package values
+                //notice the word selected after option tag
+                return `<option selected value="${tech.id}" >${tech.techPackage}</option>`
 
-        })
+                //Conditional that updates the dropbowm to appear unselected if it's not in state (if false)
+            } else {
+                return `<option value="${tech.id}" >${tech.techPackage}</option>`
+            }
+        }
+    )
     //So an object comes into your function, and a string gets returned. That string goes into a new array.
 
     //The .join() array method joins things together, such as these HTML elements    

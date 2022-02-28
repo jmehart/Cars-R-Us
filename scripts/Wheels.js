@@ -1,4 +1,4 @@
-import { getWheels, setWheels } from "./dataAccess.js"
+import { getWheels, setWheels, getState } from "./dataAccess.js"
 
 //Invoke the getWheels() function created in dataAccess
 const wheels = getWheels()
@@ -9,6 +9,9 @@ const wheels = getWheels()
 export const Wheels = () => {
     //define the HTML and then add on to it
     let html = "<h2>Wheels</h2>"
+
+    //Invoking the getState function to access transient state
+    const state = getState()
 
     //Start creating a dropdown menu, which uses the <select> HTML element
     //Whichever option the user chooses will then be displayed in the select box
@@ -23,12 +26,19 @@ export const Wheels = () => {
     //but in the new array, it puts items in the form that you specify.
     const arrayOfOptions = wheels.map(
         //Unlike a for..of loop, .map() invokes the function that you define.
-        //As it iterates the array, it will take the object at the current location and pass it as an argument to your function. Your function defines the technology parameter.
+        //As it iterates the array, it will take the object at the current location and pass it as an argument to your function. Your function defines the wheels parameter.
         (wheel) => {
-            //return an HTML element that shows options for the tech dropdown - this will show the package values
-            return `<option value="${wheel.id}">${wheel.wheelType}</option>`
-        }
-    )
+            //Conditional to match the wheel id with the property wheelId in the transient state
+            //Without this, the selected option would not take the place of "select a wheel color" as default display.
+            if (wheel.id === state.wheelId) {
+                //return an HTML element that shows options for the wheels dropdown - this will show the package values
+                //Notice the word selected after option tag
+                return `<option selected value="${wheel.id}">${wheel.wheelType}</option>`
+                //Conditional that updates the dropdowm to appear unselected if it's not in state (if false)
+            } else {
+                return `<option value="${wheel.id}">${wheel.wheelType}</option>`
+            }
+        })
     //So an object comes into your function, and a string gets returned. That string goes into a new array.
 
     //The .join() array method joins things together, such as these HTML elements    
